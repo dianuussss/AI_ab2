@@ -3,7 +3,7 @@
 ## 1. Ссылки
 
 - Issue: https://github.com/dianuussss/AI_ab2/issues/1
-- PR: _(ссылка появится после `gh pr create` — см. ниже)_
+- PR: создать командой ниже (ветка уже на GitHub: `feature/cancel-pending-request`)
 - Репозиторий: https://github.com/dianuussss/AI_ab2
 
 ## 2. Fine-grained PAT (least privilege)
