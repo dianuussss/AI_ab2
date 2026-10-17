@@ -607,6 +607,114 @@ public class LibraryServiceTests
         Assert.Equal(RequestStatus.Approved, borrow2.Status);
     }
 
+    [Fact]
+    public void CancelRequest_WhenPendingAndCreator_ShouldCancel()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+
+        LibraryRequest cancelled = service.CancelRequest(WriterName, request.Id);
+        LibraryRequest? stored = service.FindRequest(request.Id);
+
+        Assert.Equal(RequestStatus.Cancelled, cancelled.Status);
+        Assert.NotNull(stored);
+        Assert.Equal(RequestStatus.Cancelled, stored.Status);
+    }
+
+    [Fact]
+    public void CancelRequest_WhenRequesterNameIsEmpty_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+
+        Assert.Throws<ArgumentException>(
+            () => service.CancelRequest(string.Empty, request.Id));
+    }
+
+    [Fact]
+    public void CancelRequest_WhenRequesterNameIsWhitespace_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+
+        Assert.Throws<ArgumentException>(
+            () => service.CancelRequest("   ", request.Id));
+    }
+
+    [Fact]
+    public void CancelRequest_WhenRequestNotFound_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.CancelRequest(WriterName, 999));
+    }
+
+    [Fact]
+    public void CancelRequest_WhenAnotherUser_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.CancelRequest(ReaderName, request.Id));
+    }
+
+    [Fact]
+    public void CancelRequest_WhenAlreadyApproved_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+        service.ApproveRequest(LibrarianName, request.Id);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.CancelRequest(WriterName, request.Id));
+    }
+
+    [Fact]
+    public void CancelRequest_WhenAlreadyRejected_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+        service.RejectRequest(LibrarianName, request.Id);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.CancelRequest(WriterName, request.Id));
+    }
+
+    [Fact]
+    public void CancelRequest_WhenAlreadyCancelled_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+        service.CancelRequest(WriterName, request.Id);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.CancelRequest(WriterName, request.Id));
+    }
+
+    [Fact]
+    public void ApproveRequest_WhenAlreadyCancelled_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+        service.CancelRequest(WriterName, request.Id);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.ApproveRequest(LibrarianName, request.Id));
+    }
+
+    [Fact]
+    public void RejectRequest_WhenAlreadyCancelled_ShouldThrow()
+    {
+        LibraryService service = CreateServiceWithBasicUsers();
+        LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
+        service.CancelRequest(WriterName, request.Id);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => service.RejectRequest(LibrarianName, request.Id));
+    }
+
     private static LibraryService CreateServiceWithBasicUsers()
     {
         LibraryService service = CreateService();

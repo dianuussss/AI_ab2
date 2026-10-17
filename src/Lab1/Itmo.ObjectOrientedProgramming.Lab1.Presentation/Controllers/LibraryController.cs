@@ -51,6 +51,14 @@ public class LibraryController : ILibraryController
         return _libraryService.RejectRequest(librarianName, requestId);
     }
 
+    public LibraryRequest Cancel(string requesterName, int requestId)
+    {
+        if (string.IsNullOrWhiteSpace(requesterName))
+            throw new ArgumentException("Requester name cannot be empty.", nameof(requesterName));
+
+        return _libraryService.CancelRequest(requesterName, requestId);
+    }
+
     public LibraryRequest? GetRequest(int requestId) => _libraryService.FindRequest(requestId);
 
     public Book? GetBook(BookIdentifier identifier) => _libraryService.FindBook(identifier);

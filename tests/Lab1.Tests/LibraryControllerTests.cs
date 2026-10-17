@@ -334,6 +334,37 @@ public class LibraryControllerTests
         Assert.Null(book);
     }
 
+    [Fact]
+    public void Cancel_WhenPendingAndCreator_ShouldCancel()
+    {
+        LibraryController controller = CreateControllerWithBasicUsers();
+        LibraryRequest request = controller.SubmitAddBook(WriterName, BookTitle, WriterName, 5, 2);
+
+        LibraryRequest cancelled = controller.Cancel(WriterName, request.Id);
+
+        Assert.Equal(RequestStatus.Cancelled, cancelled.Status);
+    }
+
+    [Fact]
+    public void Cancel_WhenRequesterNameIsEmpty_ShouldThrow()
+    {
+        LibraryController controller = CreateControllerWithBasicUsers();
+        LibraryRequest request = controller.SubmitAddBook(WriterName, BookTitle, WriterName, 5, 2);
+
+        Assert.Throws<ArgumentException>(
+            () => controller.Cancel(string.Empty, request.Id));
+    }
+
+    [Fact]
+    public void Cancel_WhenAnotherUser_ShouldThrow()
+    {
+        LibraryController controller = CreateControllerWithBasicUsers();
+        LibraryRequest request = controller.SubmitAddBook(WriterName, BookTitle, WriterName, 5, 2);
+
+        Assert.Throws<BusinessRuleViolationException>(
+            () => controller.Cancel(ReaderName, request.Id));
+    }
+
     private static LibraryController CreateControllerWithBasicUsers()
     {
         LibraryController controller = CreateController();
