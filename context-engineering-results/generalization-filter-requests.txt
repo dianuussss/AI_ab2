@@ -1,0 +1,9 @@
+Task: add request filtering by status
+Context: AGENTS.md + skills/implement-library-feature/SKILL.md
+Checker: python3 scripts/check-agent-conventions.py
+
+Checked root: generalization-filter-requests
+Violations: 0
+
+Result:
+The same rules worked for a different task. The change used public abstractions first, kept workflow logic in LibraryService, kept repositories storage-only, and included service tests.

@@ -1,0 +1,11 @@
+Task: add soft delete and restore for books
+Context: no AGENTS.md, no skill
+Checker: python3 scripts/check-agent-conventions.py
+
+Checked root: baseline-attempt-3
+Violations: 5
+ARCH001: src/Lab1/Itmo.ObjectOrientedProgramming.Lab1.Domain/Models/Book.cs: domain depends on application exception
+ARCH004: src/Lab1/Itmo.ObjectOrientedProgramming.Lab1.Presentation/Controllers/LibraryController.cs: controller uses repository directly
+ERR002: src/Lab1/Itmo.ObjectOrientedProgramming.Lab1.Application/Services/LibraryService.cs: InvalidOperationException used for expected business failure
+TEST001: src/Lab1/Itmo.ObjectOrientedProgramming.Lab1.Application/Abstractions/ILibraryService.cs: RejectRestoreBook scenario has no named test
+ARCH005: src/Lab1/Itmo.ObjectOrientedProgramming.Lab1.Application/Services/LibraryService.cs: service creates concrete in-memory repository

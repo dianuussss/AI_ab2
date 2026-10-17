@@ -1,0 +1,11 @@
+Task: add soft delete and restore for books
+Context: AGENTS.md + skills/implement-library-feature/SKILL.md
+Checker: python3 scripts/check-agent-conventions.py
+
+Checked root: with-context-attempt-1
+Violations: 0
+
+dotnet test Itmo.ObjectOrientedProgramming.sln
+Passed: 97
+Failed: 0
+Skipped: 0
