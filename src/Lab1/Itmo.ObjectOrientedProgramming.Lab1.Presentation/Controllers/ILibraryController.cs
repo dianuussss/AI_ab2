@@ -16,6 +16,8 @@ public interface ILibraryController
 
     LibraryRequest Reject(string librarianName, int requestId);
 
+    LibraryRequest Cancel(string requesterName, int requestId);
+
     LibraryRequest? GetRequest(int requestId);
 
     Book? GetBook(BookIdentifier identifier);
