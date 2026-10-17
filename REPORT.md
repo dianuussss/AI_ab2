@@ -3,7 +3,7 @@
 ## 1. Ссылки
 
 - Issue: https://github.com/dianuussss/AI_ab2/issues/1
-- PR: создать командой ниже (ветка уже на GitHub: `feature/cancel-pending-request`)
+- PR: https://github.com/dianuussss/AI_ab2/pull/2
 - Репозиторий: https://github.com/dianuussss/AI_ab2
 
 ## 2. Fine-grained PAT (least privilege)
@@ -64,4 +64,4 @@ Fine-grained PAT сужает **поверхность возможного ущ
 - правила: только creator, только `Pending`, ошибки через `BusinessRuleViolationException` / `ArgumentException`
 - тесты success + edge cases (чужой пользователь, уже approved/rejected/cancelled, approve/reject после cancel)
 
-Локально: `dotnet test Itmo.ObjectOrientedProgramming.sln` и convention script с `Violations: 0`.
+Локально пройдено: `dotnet test Itmo.ObjectOrientedProgramming.sln` и convention script с `Violations: 0`. PR связан с issue через `Closes #1`.
