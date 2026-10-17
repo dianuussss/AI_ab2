@@ -614,9 +614,11 @@ public class LibraryServiceTests
         LibraryRequest request = service.CreateAddBookRequest(WriterName, BookTitle, WriterName, 5, 2);
 
         LibraryRequest cancelled = service.CancelRequest(WriterName, request.Id);
+        LibraryRequest? stored = service.FindRequest(request.Id);
 
         Assert.Equal(RequestStatus.Cancelled, cancelled.Status);
-        Assert.Equal(RequestStatus.Cancelled, service.FindRequest(request.Id)!.Status);
+        Assert.NotNull(stored);
+        Assert.Equal(RequestStatus.Cancelled, stored.Status);
     }
 
     [Fact]
