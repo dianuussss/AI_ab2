@@ -42,4 +42,12 @@ public class LibraryRequest
 
         Status = RequestStatus.Rejected;
     }
+
+    public void Cancel()
+    {
+        if (Status != RequestStatus.Pending)
+            throw new InvalidOperationException("Only pending requests can be cancelled.");
+
+        Status = RequestStatus.Cancelled;
+    }
 }

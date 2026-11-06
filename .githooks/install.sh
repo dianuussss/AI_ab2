@@ -1,12 +1,14 @@
 #!/bin/bash
 
-root="$1"
+root="${1%/}"
 
-src="$root"".githooks/pre-commit"
-dest="$root"".git/hooks/pre-commit"
+src="$root/.githooks/pre-commit"
+dest="$root/.git/hooks/pre-commit"
 
-if [[ ! -f "$dst" ]]
+mkdir -p "$root/.git/hooks"
+
+if [[ ! -f "$dest" ]]
 then
   cp "$src" "$dest"
   chmod +x "$dest"
-fi 
+fi

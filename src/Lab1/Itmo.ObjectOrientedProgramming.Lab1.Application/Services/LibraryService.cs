@@ -188,6 +188,20 @@ public class LibraryService : ILibraryService
         return request;
     }
 
+    public LibraryRequest CancelRequest(string requesterName, int requestId)
+    {
+        if (string.IsNullOrWhiteSpace(requesterName))
+            throw new ArgumentException("Requester name cannot be empty.", nameof(requesterName));
+
+        LibraryRequest request = RequirePendingRequest(requestId);
+
+        if (!string.Equals(request.CreatorName, requesterName, StringComparison.Ordinal))
+            throw new BusinessRuleViolationException("Only the request creator can cancel it.");
+
+        request.Cancel();
+        return request;
+    }
+
     public LibraryRequest? FindRequest(int requestId) => _requestRepository.Find(requestId);
 
     public Book? FindBook(BookIdentifier identifier) => _bookRepository.Find(identifier);
